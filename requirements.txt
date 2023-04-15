@@ -1,0 +1,7 @@
+pandas
+numpy
+cv
+matplotlib
+tqdm
+
+-e .
