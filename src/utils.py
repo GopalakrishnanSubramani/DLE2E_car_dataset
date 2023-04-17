@@ -14,6 +14,7 @@ def save_model(epochs, model, optimizer, criterion):
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
                 }, f"model.pth")
+    
 def save_plots(train_acc, valid_acc, train_loss, valid_loss):
     """
     Function to save the loss and accuracy plots to disk.

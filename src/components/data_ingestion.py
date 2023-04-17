@@ -11,14 +11,14 @@ from skimage.io import imread
 from torch.utils.data  import DataLoader
 from tqdm import tqdm
 from torchvision import datasets, transforms, utils
-from data_transformation import get_train_transform, get_valid_transform
+from data_transformation import DataTransformation, get_train_transform,get_valid_transform
 from src.utils import imshow
+
 
 @dataclass
 class DataIngestionConfig:
     train_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//train"
     test_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//test"
-    IMAGE_SIZE:int = 224
     BATCH_SIZE:int = 16
     NUM_WORKERS:int = 2
 
@@ -26,6 +26,8 @@ class DataIngestionConfig:
 class DataIngestion:
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
+        self.train_transform = DataTransformation().get_train_transform()
+        self.valid_transform = DataTransformation().get_valid_transform()
 
     def initiate_data_ingestion(self):
         logging.info("Entering Data Ingestion part")
@@ -39,13 +41,13 @@ class DataIngestion:
         try:
             logging.info("Datset initialization")
             dataset_train = datasets.ImageFolder(
-                DataIngestionConfig().train_data_path, 
-                transform=(get_train_transform(DataIngestionConfig().IMAGE_SIZE))
+                self.ingestion_config.train_data_path, 
+                transform=self.train_transform
                 )
             dataset_valid = datasets.ImageFolder(
-                DataIngestionConfig().test_data_path, 
-                transform=(get_valid_transform(DataIngestionConfig().IMAGE_SIZE)))
-            
+                self.ingestion_config.test_data_path, 
+                transform=self.valid_transform
+            )
             logging.info("Dataset creation complete")
 
             """
@@ -56,12 +58,12 @@ class DataIngestion:
             """
             logging.info("Dataloader initialization")
             train_loader = DataLoader(
-                dataset_train, batch_size=DataIngestionConfig().BATCH_SIZE, 
-                shuffle=True, num_workers=DataIngestionConfig().NUM_WORKERS)
+                dataset_train, batch_size=self.ingestion_config.BATCH_SIZE, 
+                shuffle=True, num_workers=self.ingestion_config.NUM_WORKERS)
             
             valid_loader = DataLoader(
-                dataset_valid, batch_size=DataIngestionConfig().BATCH_SIZE, 
-                shuffle=False, num_workers=DataIngestionConfig().NUM_WORKERS)
+                dataset_valid, batch_size=self.ingestion_config.BATCH_SIZE, 
+                shuffle=False, num_workers=self.ingestion_config.NUM_WORKERS)
 
             logging.info("Dataloader complete")
 
@@ -69,14 +71,3 @@ class DataIngestion:
 
         except Exception as e:
             CustomException(e,sys)
-
-if __name__=='__main__':
-    class_dict = {}
-    train_loader, val_loader, class_names = DataIngestion().initiate_data_ingestion()
-    inputs, classes = next(iter(train_loader))
-    out = utils.make_grid(inputs)
-    imshow(out, title=class_names)
-    # for idx,name in enumerate(class_names):
-    #     class_dict[idx]=name
-    
-    # print(len(class_dict))
