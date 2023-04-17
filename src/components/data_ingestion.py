@@ -1,7 +1,7 @@
 import os
 import sys
 
-from DLE2E_car_dataset.src import logging
+from src.logger import logging
 from src.exception import CustomException
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
@@ -12,11 +12,12 @@ from torch.utils.data  import DataLoader
 from tqdm import tqdm
 from torchvision import datasets, transforms, utils
 from data_transformation import get_train_transform, get_valid_transform
+from src.utils import imshow
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path:str = "car_data/train"
-    test_data_path:str = "car_data/test"
+    train_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//train"
+    test_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//test"
     IMAGE_SIZE:int = 224
     BATCH_SIZE:int = 16
     NUM_WORKERS:int = 2
@@ -71,11 +72,11 @@ class DataIngestion:
 
 if __name__=='__main__':
     class_dict = {}
-    train_loader, val_loader, class_names = DataIngestion()
+    train_loader, val_loader, class_names = DataIngestion().initiate_data_ingestion()
     inputs, classes = next(iter(train_loader))
-    # out = utils.make_grid(inputs)
-    # imshow(out, title=class_names)
-    for idx,name in enumerate(class_names):
-        class_dict[idx]=name
+    out = utils.make_grid(inputs)
+    imshow(out, title=class_names)
+    # for idx,name in enumerate(class_names):
+    #     class_dict[idx]=name
     
-    print(class_dict)
+    # print(len(class_dict))
