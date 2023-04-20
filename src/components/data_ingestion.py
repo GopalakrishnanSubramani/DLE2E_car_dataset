@@ -11,14 +11,13 @@ from skimage.io import imread
 from torch.utils.data  import DataLoader
 from tqdm import tqdm
 from torchvision import datasets, transforms, utils
-from data_transformation import DataTransformation, get_train_transform,get_valid_transform
-from src.utils import imshow
-
+from data_transformation import DataTransformation
+from data_ingestion import DataIngestion
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//train"
-    test_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data//test"
+    train_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/train"
+    test_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/val"
     BATCH_SIZE:int = 16
     NUM_WORKERS:int = 2
 
@@ -37,6 +36,8 @@ class DataIngestion:
         Returns the training and validation datasets along 
         with the class names.
         """
+        data_loader= {}
+        dataset_sizes = {}
        
         try:
             logging.info("Datset initialization")
@@ -67,7 +68,21 @@ class DataIngestion:
 
             logging.info("Dataloader complete")
 
-            return train_loader, valid_loader, dataset_train.classes
+            data_loader['train'], data_loader['val']= train_loader, valid_loader
+            dataset_sizes['train'], dataset_sizes['val']= len(dataset_train), len(dataset_valid)
+            classes = dataset_train.classes
+
+            return data_loader, dataset_sizes,classes 
+
 
         except Exception as e:
             CustomException(e,sys)
+
+if __name__=='__main__':
+    dataloader,dataset_sizes ,num_classes = DataIngestion().initiate_data_ingestion()
+    # inputs, classes = next(iter(dataloader['val']))
+    # out = utils.make_grid(inputs)
+    # imshow(out, title=num_classes)
+    
+    print((dataset_sizes['train']))
+    print((dataset_sizes['val']))
