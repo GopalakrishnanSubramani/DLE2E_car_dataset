@@ -2,9 +2,8 @@ import time
 import copy
 import torch
 from dataclasses import dataclass
-from model import build_model
 from src.utils import Utils
-from tqdm.auto import tqdm
+from tqdm import tqdm
 import os
 
 @dataclass
@@ -14,11 +13,12 @@ class TrainConfig:
 class Model_Training:
     def __init__(self):
         self.utils = Utils()
+        self.device = TrainConfig()
 
-    def train_model(self,model, criterion, optimizer, scheduler,dataloader,device,dataset_sizes,num_epochs=2):
+    def train_model(self,model, criterion, optimizer, scheduler,dataloader,dataset_sizes,num_epochs=2):
         
         since = time.time()
-
+        device = self.device.device
         best_model_wts = copy.deepcopy(model.state_dict())
         best_acc = 0.0
         accuracy = {'train':[0],'val':[0]}

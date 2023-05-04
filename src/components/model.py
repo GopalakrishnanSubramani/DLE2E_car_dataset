@@ -16,7 +16,10 @@ def build_model(pretrained=True, fine_tune=False, num_classes=196):
 
 
     # model = models.resnet18(weights='IMAGENET1K_V1')
-    model = models.resnet18(pretrained=pretrained)
+    models = {  "RESNET" : models.resnet18(pretrained=pretrained),
+                "GOOGLENET" : models.googlenet(pretrained=pretrained),
+                "MOBILENET" : models.mobilenet_v3_small(pretrained=pretrained)}
+
     num_ftrs = model.fc.in_features
 
     if fine_tune:

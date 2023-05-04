@@ -12,7 +12,6 @@ from torch.utils.data  import DataLoader
 from tqdm import tqdm
 from torchvision import datasets, transforms, utils
 from data_transformation import DataTransformation
-from data_ingestion import DataIngestion
 
 @dataclass
 class DataIngestionConfig:
