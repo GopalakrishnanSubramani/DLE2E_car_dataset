@@ -4,7 +4,6 @@ from src.components.data_transformation import DataTransformation
 
 from src.logger import logging
 from src.exception import CustomException
-from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
 import torch

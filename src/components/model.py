@@ -5,10 +5,16 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 from dataclasses import dataclass
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+from src.logger import logging
+from src.exception import CustomException
+import sys
 
 @dataclass
 class MODELCONFIG:
+    """_summary_
+    This class provides the configuration for building a model
+    """
+
     LR:float = 0.001
     MOMENTUM:float = 0.9
     STEP_SIZE:float = 0.7
@@ -16,27 +22,54 @@ class MODELCONFIG:
 
 
 class BUILD_MODEL:
+
+    """_summary_
+        This class provides the configuration for initializing a model, optimizaters and loss functions 
+    """
+
     def __init__(self):
         self.model_config = MODELCONFIG()
 
     def init_model(self):
+        """_summary_
+            This function initializes the different types of model and returns a dictionary
+        """
+        logging.info(f"Initializing the model dictionary")
 
         # model = models.resnet18(weights='IMAGENET1K_V1')
-        model_list: dict = {
-                    "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
-                    "RESNET" : models.resnet18(pretrained=True),
-                    "GOOGLENET" : models.googlenet(pretrained=True),
-                    }
-    
+        try:
+            model_list: dict = {
+                        "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
+                        "RESNET" : models.resnet18(pretrained=True),
+                        "GOOGLENET" : models.googlenet(pretrained=True)}
+            
+        except Exception as e:
+            CustomException(e,sys)
+
         return model_list
     
     def init_criterion(self):
+        """_summary_
+            This function initializes the loss function
+        """
+        logging.info(f"Initializing the loss function")
+
         return nn.CrossEntropyLoss()
 
     def init_optimizer(self, model):
+        """_summary_
+            This function initializes the optimizer
+        """
+        logging.info(f"Initializing the optimizer")
+    
         return optim.SGD(model.fc.parameters(), lr= self.model_config.LR, momentum=self.model_config.MOMENTUM)
     
     def init_scheduler(self, optimizer):
+        """_summary_
+            This function initializes the scheduler
+        """
+        logging.info(f"Initializing the scheduler")
+
         return lr_scheduler.StepLR(optimizer, step_size=self.model_config.STEP_SIZE, gamma=self.model_config.GAMMA)
 
 
@@ -60,7 +93,6 @@ if __name__ == '__main__':
             num_ftrs = model.fc.in_features
 
         model.fc = nn.Linear(num_ftrs, out_features=len(num_classes))
-        model = model.to(device)
 
         criterion = BUILD_MODEL().init_criterion()
         optimizer = BUILD_MODEL().init_optimizer(model=model)
