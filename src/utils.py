@@ -21,7 +21,7 @@ class Utils:
         self.config = UtilsConfig()
 
 
-    def save_model(self,epochs, model, optimizer, criterion):
+    def save_model(self,name,epochs, model, optimizer, criterion):
         """
         Function to save the trained model to disk.
         """     
@@ -31,9 +31,9 @@ class Utils:
                     'model_state_dict': model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
                     'loss': criterion,
-                    }, os.path.join(self.config.model_dir,f"model.pth"))
+                    }, os.path.join(self.config.model_dir,f"{name}_model.pth"))
         
-    def save_plots(self,train_acc, valid_acc, train_loss, valid_loss):
+    def save_plots(self,name,train_acc, valid_acc, train_loss, valid_loss):
         """
         Function to save the loss and accuracy plots to disk.
         """
@@ -51,7 +51,7 @@ class Utils:
         plt.xlabel('Epochs')
         plt.ylabel('Accuracy')
         plt.legend()
-        plt.savefig(os.path.join(self.config.plot_dir,f"accuracy.png"))
+        plt.savefig(os.path.join(self.config.plot_dir,f"{name}_accuracy.png"))
         
         # Loss plots.
         plt.figure(figsize=(10, 7))
@@ -66,7 +66,7 @@ class Utils:
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
         plt.legend()
-        plt.savefig(os.path.join(UtilsConfig().plot_dir,f"loss.png"))
+        plt.savefig(os.path.join(UtilsConfig().plot_dir,f"{name}_loss.png"))
 
     def imshow(self,inp, title=None):
         "Imshow for tensor"

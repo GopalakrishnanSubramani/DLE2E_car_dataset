@@ -15,7 +15,7 @@ class Model_Training:
         self.utils = Utils()
         self.device = TrainConfig()
 
-    def train_model(self,model, criterion, optimizer, scheduler,dataloader,dataset_sizes,num_epochs=2):
+    def train_model(self,name,model, criterion, optimizer, scheduler,dataloader,dataset_sizes,num_epochs=2):
         
         since = time.time()
         device = self.device.device
@@ -87,10 +87,10 @@ class Model_Training:
         model.load_state_dict(best_model_wts)
 
         # Save the trained model weights.
-        self.utils.save_model(num_epochs, model, optimizer, criterion)
+        self.utils.save_model(name,num_epochs, model, optimizer, criterion)
 
             # Save the loss and accuracy plots.
-        self.utils.save_plots(accuracy['train'], accuracy['val'], loss_epoch['train'], loss_epoch['val'])
+        self.utils.save_plots(name,accuracy['train'], accuracy['val'], loss_epoch['train'], loss_epoch['val'])
 
 #         return model
 

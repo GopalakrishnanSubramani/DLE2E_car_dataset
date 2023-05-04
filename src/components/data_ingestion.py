@@ -1,5 +1,6 @@
 import os
 import sys
+from src.components.data_transformation import DataTransformation
 
 from src.logger import logging
 from src.exception import CustomException
@@ -11,7 +12,8 @@ from skimage.io import imread
 from torch.utils.data  import DataLoader
 from tqdm import tqdm
 from torchvision import datasets, transforms, utils
-from data_transformation import DataTransformation
+
+
 
 @dataclass
 class DataIngestionConfig:
@@ -85,3 +87,4 @@ if __name__=='__main__':
     
     print((dataset_sizes['train']))
     print((dataset_sizes['val']))
+    print((num_classes))

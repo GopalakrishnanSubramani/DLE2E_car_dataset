@@ -1,17 +1,8 @@
-import os
-from dataclasses import dataclass
 
 
-@dataclass
-class UtilsConfig:
-    os.makedirs("src/results/models", exist_ok=True)
-    os.makedirs("src/results/plots", exist_ok=True)
+model_list = {  "RESNET" : "models.resnet18(pretrained=pretrained)",
+                "GOOGLENET" :" models.googlenet(pretrained=pretrained)",
+                "MOBILENET" : "models.mobilenet_v3_small(pretrained=pretrained)"}
 
-    model_dir = os.path.join("src/results/models")
-    plot_dir = os.path.join("src/results/plots")
-
-
-if __name__ == '__main__':
-    # path =os.path.join(UtilsConfig().model_dir,f"model.pth")
-    path:str = os.path.dirname(UtilsConfig().plot_dir)
-    print(path)
+for i,y in model_list.items():
+    print(i + "---------" +y)
