@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from dataclasses import dataclass
+from src.dirs import dirs
 matplotlib.style.use('ggplot')
 
 @dataclass
 class UtilsConfig:
 
-    model_dir = os.path.join("src/results/models")
-    plot_dir = os.path.join("src/results/plots")
+    model_dir = os.path.join(dirs['model_dir'])
+    plot_dir = os.path.join(dirs['plot_dir'])
 
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(plot_dir, exist_ok=True)

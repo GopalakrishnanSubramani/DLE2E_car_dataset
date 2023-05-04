@@ -1,26 +1,21 @@
 import os
 import sys
-from src.components.data_transformation import DataTransformation
+from src.dirs import dirs
 
+from src.components.data_transformation import DataTransformation
 from src.logger import logging
 from src.exception import CustomException
 from dataclasses import dataclass
 
-import torch
-from skimage.io import imread
 from torch.utils.data  import DataLoader
-from tqdm import tqdm
-from torchvision import datasets, transforms, utils
-
-
+from torchvision import datasets
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/train"
-    test_data_path:str = "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/val"
+    train_data_path:str = dirs['train_data_path'] 
+    test_data_path:str = dirs['test_data_path']
     BATCH_SIZE:int = 16
     NUM_WORKERS:int = 2
-
 
 class DataIngestion:
     def __init__(self):
