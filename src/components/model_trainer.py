@@ -19,7 +19,7 @@ class Model_Training:
         self.utils = Utils()
         self.device = TrainConfig()
 
-    def train_model(self,name,model, criterion, optimizer, scheduler,dataloader,dataset_sizes,num_epochs=2):
+    def train_model(self,name,model, criterion, optimizer, scheduler,dataloader,dataset_sizes,num_epochs):
         """_summary_
             This function contains a loop for model training and saving the model weights and plots
         """

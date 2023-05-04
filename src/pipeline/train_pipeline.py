@@ -20,9 +20,10 @@ class TRAINCONFIG:
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-class TRAINING():
+class TRAINING:
     def __init__(self):
         self.train_config = TRAINCONFIG()
+        self.epochs = 50
 
     def training(self):
         """_summary_
@@ -55,9 +56,10 @@ class TRAINING():
 
                 self.train_config.trainer.train_model(name=name,model=model, criterion=criterion, 
                                                     optimizer=optimizer,scheduler=exp_lr_scheduler,
-                                                    dataloader=self.train_config.dataloader,dataset_sizes=self.train_config.dataset_sizes)
+                                                    dataloader=self.train_config.dataloader,dataset_sizes=self.train_config.dataset_sizes,num_epochs= self.epochs)
         except Exception as e:
             CustomException(e,sys)
+
 
 if __name__ == '__main__':
     training = TRAINING().training()

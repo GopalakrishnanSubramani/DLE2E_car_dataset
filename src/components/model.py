@@ -36,12 +36,16 @@ class BUILD_MODEL:
         """
         logging.info(f"Initializing the model dictionary")
 
-        # model = models.resnet18(weights='IMAGENET1K_V1')
         try:
+            # model_list: dict = {
+            #             "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
+            #             "RESNET" : models.resnet18(pretrained=True),
+            #             "GOOGLENET" : models.googlenet(pretrained=True)}
+            
             model_list: dict = {
                         "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
-                        "RESNET" : models.resnet18(pretrained=True),
-                        "GOOGLENET" : models.googlenet(pretrained=True)}
+                        "RESNET" : models.resnet18(weights='IMAGENET1K_V1'),
+                        "GOOGLENET" : models.googlenet(weights='IMAGENET1K_V1')}
             
         except Exception as e:
             CustomException(e,sys)
