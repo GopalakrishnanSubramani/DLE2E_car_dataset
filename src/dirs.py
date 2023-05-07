@@ -1,8 +1,14 @@
 
 dirs = {
     "train_data_path" : "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/train",
-    "test_data_path" : "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/val",
+    "val_data_path" : "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/val",
+    "test_data_path": "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/car_data/test/",
     "logging_path" : "/home/krish/Documents/PyTorch/End2End_Deep_learning_project_using_segmentation@classification/",
     "model_dir" :"src/results/models",
-    "plot_dir" : "src/results/plots"
+    "plot_dir" : "src/results/plots",
+    "saved_model" : "src/results/models/EFFICIENTNET_model.pth"
 }
+
+class_mapping = ['AM General Hummer SUV 2000', 'Acura Integra Type R 2001', 'Aston Martin V8 Vantage Convertible 2012',
+                    'Audi 100 Sedan 1994', 'BMW 1 Series Convertible 2012', 'Bentley Arnage Sedan 2009']
+

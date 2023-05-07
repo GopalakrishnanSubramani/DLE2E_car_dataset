@@ -30,27 +30,29 @@ class BUILD_MODEL:
     def __init__(self):
         self.model_config = MODELCONFIG()
 
-    def init_model(self):
+    def init_model(self,pretrained=True):
         """_summary_
             This function initializes the different types of model and returns a dictionary
         """
         logging.info(f"Initializing the model dictionary")
 
         try:
+            model_list: dict = {
+                        "EFFICIENTNET" : models.efficientnet_b0(pretrained=pretrained),
+                        "RESNET" : models.resnet18(pretrained=pretrained),
+                        "GOOGLENET" : models.googlenet(init_weights=pretrained)}
+            
+            #uncomment the following for training
+
             # model_list: dict = {
             #             "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
-            #             "RESNET" : models.resnet18(pretrained=True),
-            #             "GOOGLENET" : models.googlenet(pretrained=True)}
-            
-            model_list: dict = {
-                        "EFFICIENTNET" : models.efficientnet_b0(weights='EfficientNet_B0_Weights.IMAGENET1K_V1'),
-                        "RESNET" : models.resnet18(weights='IMAGENET1K_V1'),
-                        "GOOGLENET" : models.googlenet(weights='IMAGENET1K_V1')}
-            
+            #             "RESNET" : models.resnet18(weights='IMAGENET1K_V1'),
+            #             "GOOGLENET" : models.googlenet(weights='IMAGENET1K_V1')}
+            return model_list
+        
         except Exception as e:
             CustomException(e,sys)
-
-        return model_list
+        
     
     def init_criterion(self):
         """_summary_
