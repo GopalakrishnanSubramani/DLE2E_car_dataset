@@ -5,7 +5,9 @@ import numpy as np
 import os
 from dataclasses import dataclass
 from src.dirs import dirs
+import cv2 
 matplotlib.style.use('ggplot')
+
 
 @dataclass
 class UtilsConfig:
@@ -82,3 +84,35 @@ class Utils:
             plt.title(title)
         plt.pause(0.001)  # pause a bit so that plots are updated
         plt.show()
+
+    def cv_batch_prediction(self,inp,ground_truth:str,prediction:str,win:str="Car Classification"):
+        inp = inp[0].numpy().transpose((1, 2, 0))
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+        inp = std * inp + mean
+
+        font, fontscale = cv2.FONT_HERSHEY_SIMPLEX,1
+        ground_truth_color,prediction_color = (0,255,0),(0,0,255)
+        thickness = 1
+
+        inp=cv2.resize(inp,(1000,500))
+        inp = cv2.putText(inp,ground_truth,(0,30),font,fontscale,ground_truth_color,thickness,cv2.LINE_4)
+        inp = cv2.putText(inp,prediction,(250,470),font,fontscale,prediction_color,thickness,cv2.LINE_4)
+        cv2.imshow(win,inp)
+        cv2.waitKey(0)
+    
+    def cv_prediction(self,inp,ground_truth:str,prediction:str,win:str="Car Classification"):
+        inp = inp.numpy().transpose((1, 2, 0))
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+        inp = std * inp + mean
+
+        font, fontscale = cv2.FONT_HERSHEY_SIMPLEX,1
+        ground_truth_color,prediction_color = (0,255,0),(0,0,255)
+        thickness = 1
+
+        inp=cv2.resize(inp,(1000,500))
+        inp = cv2.putText(inp,ground_truth,(0,30),font,fontscale,ground_truth_color,thickness,cv2.LINE_4)
+        inp = cv2.putText(inp,prediction,(250,470),font,fontscale,prediction_color,thickness,cv2.LINE_4)
+        cv2.imshow(win,inp)
+        cv2.waitKey(0)
