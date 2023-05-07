@@ -4,13 +4,9 @@ from src.components.model import BUILD_MODEL
 import torchvision.transforms as T
 from PIL import Image
 from src.dirs import class_mapping, dirs
-import matplotlib.pyplot as plt
-import numpy as np
-import matplotlib
 from dataclasses import dataclass
 from src.utils import Utils
-matplotlib.style.use('ggplot')
-import cv2
+
 
 @dataclass
 class INFERENCE_CONFIG:
@@ -23,7 +19,6 @@ class INFERENCE:
     def __init__(self):
         self.class_mapping = class_mapping
         self.config = INFERENCE_CONFIG()
-
     
     def transform_image(self,image):
         my_transforms = T.Compose([
