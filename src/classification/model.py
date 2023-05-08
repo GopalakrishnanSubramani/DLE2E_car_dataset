@@ -84,7 +84,7 @@ if __name__ == '__main__':
     from model_trainer import Model_Training
 
     model = BUILD_MODEL().init_model()   
-    dataloader,dataset_sizes ,num_classes = DataIngestion().initiate_data_ingestion()
+    dataloader,dataset_sizes = DataIngestion().initiate_data_ingestion()
     trainer = Model_Training()
     
     for name,model in model.items():

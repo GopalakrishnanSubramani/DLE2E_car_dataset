@@ -1,12 +1,15 @@
 import torch
-from src.components.data_ingestion import DataIngestion
-from src.components.model import BUILD_MODEL
+from src.classification.data_ingestion import DataIngestion
+from src.classification.model import BUILD_MODEL
 import torchvision.transforms as T
 from PIL import Image
 from src.dirs import class_mapping, dirs
 from dataclasses import dataclass
 from src.utils import Utils
 
+from src.logger import logging
+from src.exception import CustomException
+import sys
 
 @dataclass
 class INFERENCE_CONFIG:
@@ -34,34 +37,54 @@ class INFERENCE:
 
     def prepare_model(self):
             # load back the model
-        model = BUILD_MODEL().init_model(pretrained=False)
-        model = model['EFFICIENTNET'].to('cpu')
-        state_dict = torch.load(self.config.model_weights, torch.device('cpu'))["model_state_dict"]
-        num_ftrs = model.classifier[1].in_features
-        model.fc = torch.nn.Linear(num_ftrs, out_features=len(self.class_mapping))   
-        model.load_state_dict(state_dict)
-        model.eval()
+        logging.info(f"Preparing the model for inference")
+
+        try:
+            model = BUILD_MODEL().init_model(pretrained=False)
+            model = model['EFFICIENTNET'].to('cpu')
+            state_dict = torch.load(self.config.model_weights, torch.device('cpu'))["model_state_dict"]
+            num_ftrs = model.classifier[1].in_features
+            model.fc = torch.nn.Linear(num_ftrs, out_features=len(self.class_mapping))   
+            model.load_state_dict(state_dict)
+            model.eval()
+            logging.info(f"model loaded")
+            return model
         
-        return model
+        except Exception as e:
+            CustomException(e,sys)
 
     def get_prediction(self):
-        image = Image.open(self.config.single_img_path)
-        tensor = self.transform_image(image=image)
-        model = self.prepare_model()
-        outputs = model(tensor[None, ...])
-        _, predicted = torch.max(outputs, 1)
+        logging.info(f"Prediction for single image")
 
-        Utils().cv_prediction(tensor,"car",str(self.class_mapping[predicted]))
+        try:
+            image = Image.open(self.config.single_img_path)
+            tensor = self.transform_image(image=image)
+            model = self.prepare_model()
+            outputs = model(tensor[None, ...])
+            _, predicted = torch.max(outputs, 1)
+            logging.info(f"Predicted for single image")
+
+            Utils().cv_prediction(tensor,"car",str(self.class_mapping[predicted]))
+        
+        except Exception as e:
+            CustomException(e,sys)        
 
     def batch_prediction(self):
-        #check Ground Truth class names
-        model = self.prepare_model()
-        for i,(inputs,classes) in enumerate(self.config.dataloader):
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs, 1)
-            Utils().cv_batch_prediction(inputs,str(self.class_mapping[classes]),str(self.class_mapping[predicted]))
-            # break
+        logging.info(f"Prediction for image batch")
 
+        #check Ground Truth class names
+        try:
+            model = self.prepare_model()
+            for i,(inputs,classes) in enumerate(self.config.dataloader):
+                outputs = model(inputs)
+                _, predicted = torch.max(outputs, 1)
+
+                logging.info(f"Predicted for batch of image")
+                Utils().cv_batch_prediction(inputs,str(self.class_mapping[classes]),str(self.class_mapping[predicted]))
+                # break
+                
+        except Exception as e:
+            CustomException(e,sys)
 
 if __name__=='__main__':
     INFERENCE().get_prediction()

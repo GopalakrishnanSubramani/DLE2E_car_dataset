@@ -1,6 +1,6 @@
-from src.components.data_ingestion import DataIngestion
-from src.components.model import BUILD_MODEL
-from src.components.model_trainer import Model_Training
+from src.classification.data_ingestion import DataIngestion
+from src.classification.model import BUILD_MODEL
+from src.classification.model_trainer import Model_Training
 import torch.nn as nn
 import torch
 from dataclasses import dataclass

@@ -1,4 +1,4 @@
-# End to End Deep Learning project using Classification model followed by Segmentation model 💵💳
+# End to End Deep Learning project using Segmentation model followed by Classification💵💳
 
 <p align="center">
   <img width="800" height="600" src="src/imgs/01663.jpg">
